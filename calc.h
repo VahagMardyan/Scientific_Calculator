@@ -3,7 +3,7 @@
 
 class Scientific_Calculator {
 public:
-    // ===== Trigonometry =====
+    // Trigonometry
     double sin(double val, bool deg) const;
     double cos(double val, bool deg) const;
     double tan(double val, bool deg) const;
@@ -25,13 +25,13 @@ public:
     double x_3root(double val) const;
     double x_nroot(double x, double n) const;
 
-    // ===== Logarithms =====
+    // Logarithms
     double log_e(double val) const;
     double log_10(double val) const;
     double log_2(double val) const;
     double log_a_b(double a, double b) const;
 
-    // ===== Arithmetic =====
+    // Arithmetic
     double add(double a, double b) const;
     double sub(double a, double b) const;
     double mul(double a, double b) const;
@@ -41,12 +41,12 @@ public:
     double inv(double x) const;
     double absolute(double a) const;
 
-    // ===== Combinatorics =====
+    // Combinatorics
     double factorial(int n) const;
     double nCr(int n, int r) const;
     double nPr(int n, int r) const;
 
-    // ===== Base Conversion =====
+    // Base Conversion
     std::string convert_base(
         const std::string& value,
         int base_from,
@@ -55,11 +55,11 @@ public:
         bool twos_complement = true
     ) const;
 
-    // ===== Sexagesimal =====
+    // Sexagesimal
     std::string to_sexagesimal(double dec_degree) const;
     double from_sexagesimal(int deg, int min, double sec) const;
 
-    // ===== Bitwise =====
+    // Bitwise
     int bit_not(int val) const;
     int bit_and(int a, int b) const;
     int bit_nand(int a, int b) const;

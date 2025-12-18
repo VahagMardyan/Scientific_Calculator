@@ -3,8 +3,9 @@
 #include <sstream>
 #include <iomanip>
 #include <cstdlib>
+#include <cmath>
 
-// INPUT
+// Input
 void CalculatorController::inputDigit(CalculatorState& s, int digit) {
     if (s.new_input) {
         s.display = std::to_string(digit);
@@ -54,7 +55,7 @@ void CalculatorController::changeSign(CalculatorState& s) {
     s.input = std::stod(s.display);
 }
 
-// BINARY OPERATIONS
+// Binary Operations
 
 void CalculatorController::setOperation(CalculatorState& s, Operation op) {
     s.acc = s.input;
@@ -122,13 +123,18 @@ void CalculatorController::calculate(CalculatorState& s) {
         return;
     }
 
+    if(std::isnan(s.result) || std::isinf(s.result)) {
+        s.error = true;
+        s.errorMsg = "There's a math error. Please check your arguments again.";
+    }
+
     s.input = s.result;
     syncDisplay(s);
     s.op = Operation::NONE;
     s.new_input = true;
 }
 
-// UNARY OPERATIONS (by button ID)
+// nary Operations (by ID)
 
 void CalculatorController::applyUnary(CalculatorState& s, int btnId) {
     switch (btnId) {
@@ -194,11 +200,16 @@ void CalculatorController::applyUnary(CalculatorState& s, int btnId) {
         return;
     }
 
+    if(std::isnan(s.input) || std::isinf(s.input)) {
+        s.error = true;
+        s.errorMsg = "There's a math error. Please check your argument again.";
+    }
+
     syncDisplay(s);
     s.new_input = true;
 }
 
-// MODES
+// Modes
 
 void CalculatorController::toggleDegRad(CalculatorState& s) {
     s.deg_mode = !s.deg_mode;
@@ -208,11 +219,7 @@ void CalculatorController::togglePowMode(CalculatorState& s) {
     s.pow_mode = !s.pow_mode;
 }
 
-// MEMORY
-
-void CalculatorController::memClear(CalculatorState& s) {
-    s.memory = 0.0;
-}
+// Memory
 
 void CalculatorController::memStore(CalculatorState& s) {
     s.memory = std::stod(s.display);
@@ -225,26 +232,19 @@ void CalculatorController::memRecall(CalculatorState& s) {
     s.new_input = true;
 }
 
-// BASE CONVERSION
+void CalculatorController::memClear(CalculatorState& s) {
+    s.memory = 0.0;
+}
+
+// Base conversion
 
 void CalculatorController::convertBase(CalculatorState& s, int newBase) {
-    try {
-        // decimal mode → no floats
-        if (s.base == 10 && s.display.find('.') != std::string::npos) {
-            throw std::runtime_error("Only integers allowed");
-        }
-
         s.display = calc.convert_base(s.display, s.base, newBase);
         s.base = newBase;
         s.new_input = true;
-    }
-    catch (...) {
-        s.error = true;
-        s.display = "Error";
-    }
 }
 
-// CLEAR
+// Clear
 
 void CalculatorController::clearAll(CalculatorState& s) {
     double mem = s.memory;
@@ -252,7 +252,7 @@ void CalculatorController::clearAll(CalculatorState& s) {
     s.memory = mem;
 }
 
-// DISPLAY SYNC
+// Display Sync
 
 void CalculatorController::syncDisplay(CalculatorState& s) {
     std::ostringstream oss;

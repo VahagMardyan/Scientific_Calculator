@@ -31,7 +31,6 @@ public:
 
     void clearAll(CalculatorState&);
 
-    void setError(CalculatorState&, const std::string&);
 private:
     Scientific_Calculator calc;
     void syncDisplay(CalculatorState&);

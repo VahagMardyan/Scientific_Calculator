@@ -1,15 +1,3 @@
-// Button IDs
-#define BTN_0   100
-#define BTN_1   101
-#define BTN_2   102
-#define BTN_3   103
-#define BTN_4   104
-#define BTN_5   105
-#define BTN_6   106
-#define BTN_7   107
-#define BTN_8   108
-#define BTN_9   109
-
 // Scientific function buttons.
 #define BTN_ADD     110
 #define BTN_SUB     111
@@ -72,3 +60,4 @@
 #define BTN_COLON       168
 #define BTN_NROOT      169
 #define BTN_POW_MODE   170
+

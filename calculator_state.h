@@ -27,3 +27,4 @@ struct CalculatorState {
 
     std::string display;
 };
+

@@ -28,7 +28,6 @@ private:
     void updateDisplay();                // Updates QLineEdit display
 
     void connectButtons();               // Connect UI buttons to Controller/Core
-
 };
 
 #endif // MAINWINDOW_H
