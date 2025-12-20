@@ -261,7 +261,7 @@ color: rgb(166, 89, 36);</string>
      <string notr="true">background-color: rgb(34, 54, 87);</string>
     </property>
     <property name="text">
-     <string>rad-&gt;°</string>
+     <string>rad→°</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnPow">
@@ -305,7 +305,7 @@ color: rgb(166, 89, 36);</string>
      <string notr="true">background-color: rgb(34, 54, 87);</string>
     </property>
     <property name="text">
-     <string>°-&gt;rad</string>
+     <string>°→rad</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnE">
@@ -552,6 +552,11 @@ color: rgb(166, 89, 36);</string>
       <width>90</width>
       <height>29</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>false</bold>
+     </font>
     </property>
     <property name="cursor">
      <cursorShape>PointingHandCursor</cursorShape>
@@ -1326,7 +1331,7 @@ color: rgb(125,16,16);</string>
      <string notr="true">background-color: rgb(31, 47, 83);</string>
     </property>
     <property name="text">
-     <string>DMS-&gt;DEC</string>
+     <string>DMS→DEC</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnXor">
@@ -1462,7 +1467,7 @@ color: rgb(125,16,16);</string>
      <string notr="true">background-color: rgb(31, 47, 83);</string>
     </property>
     <property name="text">
-     <string>DEC-&gt;DMS</string>
+     <string>DEC→DMS</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btnNor">
@@ -1572,7 +1577,7 @@ color: rgb(125,16,16);</string>
      <string notr="true">background-color: rgb(50, 90, 60);</string>
     </property>
     <property name="text">
-     <string>x² -&gt; 10^x</string>
+     <string>x²  → 10^x</string>
     </property>
    </widget>
   </widget>
