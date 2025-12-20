@@ -239,8 +239,8 @@ std::string Scientific_Calculator::convert_base(
 std::string Scientific_Calculator::to_sexagesimal(double d) const {
     bool neg = d < 0;
     d = std::fabs(d);
-    int deg = (int)d;
-    int min = (int)((d - deg) * 60);
+    int deg = static_cast<int>(d);
+    int min = static_cast<int>((d - deg) * 60);
     double sec = ((d - deg) * 60 - min) * 60;
     return (neg ? "-" : "") +
            std::to_string(deg) + "° " +

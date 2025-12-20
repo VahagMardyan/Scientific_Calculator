@@ -1,5 +1,6 @@
 #pragma once
 #include "calculator_state.h"
+#include "unar_ids.h"
 #include "calc.h"
 
 class CalculatorController {
@@ -15,7 +16,7 @@ public:
     void calculate(CalculatorState&);
 
     // unary ops (by button id)
-    void applyUnary(CalculatorState&, int btnId);
+    void applyUnary(CalculatorState&, Unar_ids btnId);
 
     // modes
     void toggleDegRad(CalculatorState&);

@@ -1,5 +1,4 @@
 #include "calculator_controller.h"
-#include "ids.h"
 #include <sstream>
 #include <iomanip>
 #include <cstdlib>
@@ -44,7 +43,7 @@ void CalculatorController::backspace(CalculatorState& s) {
 }
 
 void CalculatorController::changeSign(CalculatorState& s) {
-    if (s.display == "0")
+    if (s.display == "0" || s.display.empty())
         return;
 
     if (s.display[0] == '-')
@@ -78,7 +77,7 @@ void CalculatorController::calculate(CalculatorState& s) {
         s.result = calc.div(s.acc, s.input);
         break;
     case Operation::MOD:
-        s.result = calc.mod((int)s.acc, (int)s.input);
+        s.result = calc.mod(static_cast<int>(s.acc), static_cast<int>(s.input));
         break;
     case Operation::PERCENT:
         s.result = calc.percent(s.acc, s.input);
@@ -94,29 +93,29 @@ void CalculatorController::calculate(CalculatorState& s) {
         break;
 
     case Operation::AND:
-        s.result = calc.bit_and((int)s.acc, (int)s.input);
+        s.result = calc.bit_and(static_cast<int>(s.acc), static_cast<int>(s.input));
         break;
     case Operation::NAND:
-        s.result = calc.bit_nand((int)s.acc, (int)s.input);
+        s.result = calc.bit_nand(static_cast<int>(s.acc), static_cast<int>(s.input));
         break;
     case Operation::OR:
-        s.result = calc.bit_or((int)s.acc, (int)s.input);
+        s.result = calc.bit_or(static_cast<int>(s.acc), static_cast<int>(s.input));
         break;
     case Operation::NOR:
-        s.result = calc.bit_nor((int)s.acc, (int)s.input);
+        s.result = calc.bit_nor(static_cast<int>(s.acc), static_cast<int>(s.input));
         break;
     case Operation::XOR:
-        s.result = calc.bit_xor((int)s.acc, (int)s.input);
+        s.result = calc.bit_xor(static_cast<int>(s.acc), static_cast<int>(s.input));
         break;
     case Operation::XNOR:
-        s.result = calc.bit_xnor((int)s.acc, (int)s.input);
+        s.result = calc.bit_xnor(static_cast<int>(s.acc), static_cast<int>(s.input));
         break;
 
     case Operation::C:
-        s.result = calc.nCr((int)s.acc, (int)s.input);
+        s.result = calc.nCr(static_cast<int>(s.acc), static_cast<int>(s.input));
         break;
     case Operation::P:
-        s.result = calc.nPr((int)s.acc, (int)s.input);
+        s.result = calc.nPr(static_cast<int>(s.acc), static_cast<int>(s.input));
         break;
 
     default:
@@ -134,67 +133,73 @@ void CalculatorController::calculate(CalculatorState& s) {
     s.new_input = true;
 }
 
-// nary Operations (by ID)
+// Unary Operations
 
-void CalculatorController::applyUnary(CalculatorState& s, int btnId) {
+void CalculatorController::applyUnary(CalculatorState& s, Unar_ids btnId) {
     switch (btnId) {
-    case BTN_SIN:
+    case Unar_ids::Sin:
         s.input = calc.sin(s.input, s.deg_mode);
         break;
-    case BTN_COS:
+    case Unar_ids::Cos:
         s.input = calc.cos(s.input, s.deg_mode);
         break;
-    case BTN_TAN:
+    case Unar_ids::Tan:
         s.input = calc.tan(s.input, s.deg_mode);
         break;
-    case BTN_ASIN:
+    case Unar_ids::Asin:
         s.input = calc.asin(s.input, s.deg_mode);
         break;
-    case BTN_ACOS:
+    case Unar_ids::Acos:
         s.input = calc.acos(s.input, s.deg_mode);
         break;
-    case BTN_ATAN:
+    case Unar_ids::Atan:
         s.input = calc.atan(s.input, s.deg_mode);
         break;
-    case BTN_D_R:
+    case Unar_ids::DegToRad:
         s.input = calc.deg_to_rad(s.input);
         break;
-    case BTN_R_D:
+    case Unar_ids::RadToDeg:
         s.input = calc.rad_to_deg(s.input);
         break;
 
-    case BTN_LN:
+    case Unar_ids::Ln:
         s.input = calc.log_e(s.input);
         break;
-    case BTN_LOG_2_10:
-        s.input = s.pow_mode ? calc.log_2(s.input) : calc.log_10(s.input);
+    case Unar_ids::Log_2:
+        s.input = calc.log_2(s.input);
         break;
-    case BTN_X2_10:
-        s.input = s.pow_mode ? calc.x_2(s.input) : calc.x_10(s.input);
+    case Unar_ids::Log_10:
+        s.input = calc.log_10(s.input);
+        break;
+    case Unar_ids::X2:
+        s.input = calc.x_2(s.input);
+        break;
+    case Unar_ids::Pow_10X:
+        s.input = calc.x_10(s.input);
         break;
 
-    case BTN_INV:
+    case Unar_ids::Inverse:
         s.input = calc.inv(s.input);
         break;
-    case BTN_ABS:
+    case Unar_ids::Abs:
         s.input = calc.absolute(s.input);
         break;
-    case BTN_FACT:
-        s.input = calc.factorial((int)s.input);
+    case Unar_ids::Factorial:
+        s.input = calc.factorial(static_cast<int>(s.input));
         break;
 
-    case BTN_SQRT:
+    case Unar_ids::Sqrt:
         s.input = calc.x_2root(s.input);
         break;
-    case BTN_CBRT:
+    case Unar_ids::Cbrt:
         s.input = calc.x_3root(s.input);
         break;
-    case BTN_EXP:
+    case Unar_ids::Exp:
         s.input = calc.e_x(s.input);
         break;
 
-    case BTN_NOT:
-        s.input = calc.bit_not((int)s.input);
+    case Unar_ids::BitNot:
+        s.input = calc.bit_not(static_cast<int>(s.input));
         break;
     default:
         return;
@@ -222,6 +227,10 @@ void CalculatorController::togglePowMode(CalculatorState& s) {
 // Memory
 
 void CalculatorController::memStore(CalculatorState& s) {
+    if(s.display.empty()) {
+        s.memory = 0;
+        return;
+    }
     s.memory = std::stod(s.display);
     s.new_input = true;
 }

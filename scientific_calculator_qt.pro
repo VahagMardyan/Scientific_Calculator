@@ -19,7 +19,7 @@ HEADERS += \
     calc.h \
     calculator_controller.h \
     calculator_state.h \
-    ids.h \
+    unar_ids.h \
 
 FORMS += \
     mainwindow.ui

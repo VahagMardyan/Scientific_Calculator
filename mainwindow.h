@@ -1,18 +1,15 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
+#pragma once
+#define _USE_MATH_DEFINES
 #include <QMainWindow>
 #include "calc.h"
 #include "calculator_controller.h"
 #include "calculator_state.h"
-#include "ids.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -29,5 +26,3 @@ private:
 
     void connectButtons();               // Connect UI buttons to Controller/Core
 };
-
-#endif // MAINWINDOW_H

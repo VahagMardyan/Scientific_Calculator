@@ -1,4 +1,3 @@
-#define _USE_MATH_DEFINES
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 #include <QString>
@@ -101,32 +100,24 @@ void MainWindow::connectButtons() {
     // Operations
     connect(ui->btnAdd, &QPushButton::clicked, this, [this](){
         controller.setOperation(state, Operation::ADD);
-        state.acc = state.input;
-        state.new_input = true;
         ui -> statusbar -> showMessage("Input second addend");
     });
     ui->btnAdd->setShortcut(QKeySequence("+"));
 
     connect(ui->btnSub, &QPushButton::clicked, this, [this](){
         controller.setOperation(state, Operation::SUB);
-        state.acc = state.input;
-        state.new_input = true;
         ui -> statusbar -> showMessage("Input subtrahend");
     });
     ui->btnSub->setShortcut(QKeySequence("-"));
 
     connect(ui->btnMul, &QPushButton::clicked, this, [this](){
         controller.setOperation(state, Operation::MUL);
-        state.acc = state.input;
-        state.new_input = true;
         ui -> statusbar -> showMessage("Input multiplicand");
     });
     ui->btnMul->setShortcut(QKeySequence("*"));
 
     connect(ui->btnDiv, &QPushButton::clicked, this, [this](){
         controller.setOperation(state, Operation::DIV);
-        state.acc = state.input;
-        state.new_input = true;
         ui -> statusbar -> showMessage("Input divisor");
     });
     ui->btnDiv->setShortcut(QKeySequence("/"));
@@ -158,38 +149,38 @@ void MainWindow::connectButtons() {
 
     // Unary / Trig
     connect(ui->btnSin, &QPushButton::clicked, this, [this](){
-        controller.applyUnary(state, BTN_SIN);
+        controller.applyUnary(state, Unar_ids::Sin);
         updateDisplay();
     });
     ui->btnSin->setShortcut(QKeySequence("Alt+S"));
 
     connect(ui->btnCos, &QPushButton::clicked, this, [this](){
-        controller.applyUnary(state, BTN_COS);
+        controller.applyUnary(state, Unar_ids::Cos);
         updateDisplay();
     });
     ui->btnCos->setShortcut(QKeySequence("Alt+C"));
 
     connect(ui->btnTan, &QPushButton::clicked, this, [this](){
-        controller.applyUnary(state, BTN_TAN);
+        controller.applyUnary(state, Unar_ids::Tan);
         updateDisplay();
     });
     ui->btnTan->setShortcut(QKeySequence("Alt+T"));
 
     connect(ui->btnAsin, &QPushButton::clicked, this, [this](){
-        controller.applyUnary(state, BTN_ASIN);
+        controller.applyUnary(state, Unar_ids::Asin);
         updateDisplay();
     });
     connect(ui->btnAcos, &QPushButton::clicked, this, [this](){
-        controller.applyUnary(state, BTN_ACOS);
+        controller.applyUnary(state, Unar_ids::Acos);
         updateDisplay();
     });
     connect(ui->btnAtan, &QPushButton::clicked, this, [this](){
-        controller.applyUnary(state, BTN_ATAN);
+        controller.applyUnary(state, Unar_ids::Atan);
         updateDisplay();
     });
 
     connect(ui->btnLn, &QPushButton::clicked, this, [this](){
-        controller.applyUnary(state, BTN_LN);
+        controller.applyUnary(state, Unar_ids::Ln);
         updateDisplay();
     });
 
@@ -201,12 +192,13 @@ void MainWindow::connectButtons() {
     addAction(actLn);
 
     connect(ui->btnLog2_10, &QPushButton::clicked, this, [this](){
-        controller.applyUnary(state, BTN_LOG_2_10);
+        controller.applyUnary(state, state.pow_mode ? Unar_ids::Log_2 : Unar_ids::Log_10);
         updateDisplay();
     });
 
     QAction* actLog2_10 = new QAction(this);
     actLog2_10->setShortcut(QKeySequence("Ctrl+L"));
+    actLog2_10->setShortcutContext(Qt::ApplicationShortcut);
     connect(actLog2_10, &QAction::triggered, this, [this]() {
         ui->btnLog2_10->click();
     });
@@ -214,8 +206,6 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnLogAB, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::LOGAB);
-        state.acc = state.input;
-        state.new_input = true;
         ui -> statusbar -> showMessage("Input value for log(a,b)");
     });
     QAction* actLogAB = new QAction(this);
@@ -226,7 +216,7 @@ void MainWindow::connectButtons() {
     addAction(actLogAB);
 
     connect(ui->btnSqrt, &QPushButton::clicked, this, [this]() {
-        controller.applyUnary(state, BTN_SQRT);
+        controller.applyUnary(state, Unar_ids::Sqrt);
         updateDisplay();
     });
     QAction* actSqrt = new QAction(this);
@@ -237,12 +227,12 @@ void MainWindow::connectButtons() {
     addAction(actSqrt);
 
     connect(ui->btnCbrt, &QPushButton::clicked, this, [this]() {
-        controller.applyUnary(state, BTN_CBRT);
+        controller.applyUnary(state, Unar_ids::Cbrt);
         updateDisplay();
     });
 
     connect(ui->btnExp, &QPushButton::clicked, this, [this]() {
-        controller.applyUnary(state, BTN_EXP);
+        controller.applyUnary(state, Unar_ids::Exp);
         updateDisplay();
     });
     QAction* actExp = new QAction(this);
@@ -253,11 +243,12 @@ void MainWindow::connectButtons() {
     addAction(actExp);
 
     connect(ui->btn_x2_x10, &QPushButton::clicked, this, [this](){
-        controller.applyUnary(state, BTN_X2_10);
+        controller.applyUnary(state, state.pow_mode ? Unar_ids::X2 : Unar_ids::Pow_10X);
         updateDisplay();
     });
     QAction* act_X2_X10 = new QAction(this);
     act_X2_X10 -> setShortcut(QKeySequence("z"));
+    act_X2_X10->setShortcutContext(Qt::ApplicationShortcut);
     connect(act_X2_X10, &QAction::triggered, this, [this]() {
         ui->btn_x2_x10->click();
     });
@@ -265,8 +256,6 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnPow, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::POW);
-        state.acc = state.input;
-        state.new_input = true;
         ui->statusbar->showMessage("Input power");
     });
     QAction* actPow = new QAction(this);
@@ -278,8 +267,6 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnNroot, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::NROOT);
-        state.acc = state.input;
-        state.new_input = true;
         ui->statusbar->showMessage("Input root");
     });
     QAction* actNroot = new QAction(this);
@@ -291,8 +278,6 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnPercent, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::PERCENT);
-        state.acc = state.input;
-        state.new_input = true;
         ui->statusbar->showMessage("Input percentage");
     });
     QAction* actPercent = new QAction(this);
@@ -304,8 +289,6 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnMod, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::MOD);
-        state.acc = state.input;
-        state.new_input = true;
         ui->statusbar->showMessage("Input modulo");
     });
     QAction* actMod = new QAction(this);
@@ -316,12 +299,12 @@ void MainWindow::connectButtons() {
     addAction(actMod);
 
     connect(ui->btnAbs, &QPushButton::clicked, this, [this]() {
-        controller.applyUnary(state, BTN_ABS);
+        controller.applyUnary(state, Unar_ids::Abs);
         updateDisplay();
     });
 
     connect(ui->btnInv, &QPushButton::clicked, this, [this]() {
-        controller.applyUnary(state, BTN_INV);
+        controller.applyUnary(state, Unar_ids::Inverse);
         updateDisplay();
     });
     QAction* actInv = new QAction(this);
@@ -369,22 +352,23 @@ void MainWindow::connectButtons() {
     addAction(actMemC);
 
     // DEG / RAD toggle
-    QAction* actDegRad = new QAction(this);
-    actDegRad->setShortcut(QKeySequence("r"));
-
-    connect(actDegRad, &QAction::triggered, this, [this](){
+    connect(ui->btnDegRad, &QPushButton::clicked, this, [this](){
         controller.toggleDegRad(state);
         ui->btnDegRad->setText(state.deg_mode ? "DEG" : "RAD");
         ui->statusbar->showMessage(state.deg_mode ? "DEG mode" : "RAD mode");
         ui->btnDegRad->setToolTip(state.deg_mode ? "Change to radians mode (r)" : "Change to degrees mode (r)");
     });
-    addAction(actDegRad);
-    connect(ui->btnDegRad, &QPushButton::clicked, this, [=](){
-        actDegRad->trigger();
+    QAction* actDegRad = new QAction(this);
+    actDegRad->setShortcut(QKeySequence("r"));
+    actDegRad->setShortcutContext(Qt::ApplicationShortcut);
+    connect(actDegRad, &QAction::triggered, this, [this](){
+        ui->btnDegRad->click();
     });
+    addAction(actDegRad);
+
 
     connect(ui->btnDegToRad, &QPushButton::clicked, this, [this]() {
-        controller.applyUnary(state, BTN_D_R);
+        controller.applyUnary(state, Unar_ids::DegToRad);
         updateDisplay();
     });
     QAction* actD_R = new QAction(this);
@@ -395,7 +379,7 @@ void MainWindow::connectButtons() {
     addAction(actD_R);
 
     connect(ui->btnRadToDeg, &QPushButton::clicked, this, [this]() {
-        controller.applyUnary(state, BTN_R_D);
+        controller.applyUnary(state, Unar_ids::RadToDeg);
         updateDisplay();
     });
     QAction* actR_D = new QAction(this);
@@ -436,7 +420,7 @@ void MainWindow::connectButtons() {
         ui->btn_x2_x10->setText(state.pow_mode ? "x²" : "10^x");
         ui->btnPowMode->setText(state.pow_mode ? "x² -> 10^x" : "10^x -> x²");
         ui->statusbar->showMessage(state.pow_mode ? "X² mode" : "10^x mode");
-        ui->btn_x2_x10->setToolTip(state.pow_mode ? "x² (z)" : "10^x");
+        ui->btn_x2_x10->setToolTip(state.pow_mode ? "x² (z)" : "10^x (z)");
         ui->btnLog2_10->setToolTip(state.pow_mode ? "2-base logarithm (Ctrl+L)" : "10-base logarithm (Ctrl+L)");
         ui->btnPowMode->setToolTip(state.pow_mode ? "Switch to 10^x mode (y)" : "Switch to x² mode (y)");
     });
@@ -629,7 +613,7 @@ void MainWindow::connectButtons() {
     });
 
     QAction* actDecToDms = new QAction(this);
-    actDecToDms->setShortcut(QKeySequence("G"));
+    actDecToDms->setShortcut(QKeySequence("g"));
     connect(actDecToDms, &QAction::triggered, this, [this](){
         ui->btnDecToDms->click();
     });
@@ -670,7 +654,7 @@ void MainWindow::connectButtons() {
 
     // // Factorial, nCr, nPr
     connect(ui->btnFact, &QPushButton::clicked, this, [this](){
-        controller.applyUnary(state, BTN_FACT);
+        controller.applyUnary(state, Unar_ids::Factorial);
         updateDisplay();
     });
     QAction* actFact = new QAction(this);
@@ -684,8 +668,6 @@ void MainWindow::connectButtons() {
     // // nCr
     connect(ui->btnC, &QPushButton::clicked, this, [this](){
         controller.setOperation(state, Operation::C);
-        state.acc = state.input;
-        state.new_input = true;
         ui->statusbar->showMessage("Enter second number for nCr");
     });
     QAction* actNcR = new QAction(this);
@@ -699,8 +681,6 @@ void MainWindow::connectButtons() {
     // // nPr
     connect(ui->btnP, &QPushButton::clicked, this, [this](){
         controller.setOperation(state, Operation::P);
-        state.acc = state.input;
-        state.new_input = true;
         ui->statusbar->showMessage("Enter second number for nPr");
     });
     QAction* actNpR = new QAction(this);
@@ -712,7 +692,7 @@ void MainWindow::connectButtons() {
 
     // not and nor etc
     connect(ui->btnNot, &QPushButton::clicked, this, [this]() {
-        controller.applyUnary(state, BTN_NOT);
+        controller.applyUnary(state, Unar_ids::BitNot);
         updateDisplay();
     });
     QAction* actNot = new QAction(this);
@@ -724,8 +704,6 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnAnd, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::AND);
-        state.acc = state.input;
-        state.new_input = true;
         ui->statusbar->showMessage("Enter second number for AND");
     });
     QAction* actAnd = new QAction(this);
@@ -737,15 +715,11 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnNand, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::NAND);
-        state.acc = state.input;
-        state.new_input = true;
         ui->statusbar->showMessage("Enter second number for NAND");
     });
 
     connect(ui->btnOr, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::OR);
-        state.acc = state.input;
-        state.new_input = true;
         ui->statusbar->showMessage("Enter second number for OR");
     });
     QAction* actOr = new QAction(this);
@@ -757,15 +731,11 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnNor, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::NOR);
-        state.acc = state.input;
-        state.new_input = true;
         ui->statusbar->showMessage("Enter second number for NOR");
     });
 
     connect(ui->btnXor, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::XOR);
-        state.acc = state.input;
-        state.new_input = true;
         ui->statusbar->showMessage("Enter second number for XOR");
     });
     QAction* actXor = new QAction(this);
@@ -777,8 +747,6 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnXnor, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::XNOR);
-        state.acc = state.input;
-        state.new_input = true;
         ui->statusbar->showMessage("Enter second number for XNOR");
     });
 
