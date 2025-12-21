@@ -69,6 +69,5 @@ public:
     int bit_xnor(int a, int b) const;
 
 private:
-    std::string trim_suffix(const std::string& s) const;
     std::string int_to_base(long long num, int base_to, int bits, bool twos_complement) const;
 };

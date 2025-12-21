@@ -156,13 +156,6 @@ double Scientific_Calculator::nPr(int n, int r) const {
     return res;
 }
 
-std::string Scientific_Calculator::trim_suffix(const std::string& s) const {
-    std::string r = s;
-    while (!r.empty() && isspace(r.back()))
-        r.pop_back();
-    return r;
-}
-
 std::string Scientific_Calculator::int_to_base(
     long long num, int base_to, int bits, bool twos_complement) const {
 
@@ -197,7 +190,7 @@ std::string Scientific_Calculator::int_to_base(
 std::string Scientific_Calculator::convert_base(
     const std::string& num_str, int base_from, int base_to, int bits, bool twos_complement) const {
 
-    std::string s = trim_suffix(num_str);
+    std::string s = num_str;
     if (s.empty())
         return "0";
 

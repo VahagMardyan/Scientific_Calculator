@@ -1,10 +1,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
-#include <QString>
 #include <QDesktopServices>
 #include <QUrl>
 #include <QRegularExpression>
-#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
     ui->setupUi(this);
@@ -27,6 +25,15 @@ void MainWindow::updateDisplay() {
     } else {
         ui->display->setText(QString::fromStdString(state.display));
     }
+}
+
+void MainWindow::addShortcut(QPushButton* button, const QString& key) {
+    QAction* act = new QAction(this);
+    QKeySequence seq(key);
+    act->setShortcut(seq);
+    act->setShortcutContext(Qt::ApplicationShortcut);
+    connect(act, &QAction::triggered, button, &QPushButton::click);
+    addAction(act);
 }
 
 // Connect Buttons
@@ -129,11 +136,13 @@ void MainWindow::connectButtons() {
         ui->statusbar->showMessage("");
     });
     ui->btnClear->setShortcut(QKeySequence("Escape"));
+
     connect(ui->btnDel, &QPushButton::clicked, this, [this](){
         controller.backspace(state);
         updateDisplay();
     });
     ui->btnDel->setShortcut(QKeySequence("Backspace"));
+
     connect(ui->btnSign, &QPushButton::clicked, this, [this](){
         controller.changeSign(state);
         updateDisplay();
@@ -146,6 +155,7 @@ void MainWindow::connectButtons() {
         updateDisplay();
     });
     ui->btnEq->setShortcut(QKeySequence(Qt::Key_Return)); // Main enter
+    addShortcut(ui->btnEq, "Enter");
 
     // Unary / Trig
     connect(ui->btnSin, &QPushButton::clicked, this, [this](){
@@ -184,47 +194,26 @@ void MainWindow::connectButtons() {
         updateDisplay();
     });
 
-    QAction* actLn = new QAction(this);
-    actLn->setShortcut(QKeySequence("l"));
-    connect(actLn, &QAction::triggered, this, [this](){
-        ui->btnLn->click();
-    });
-    addAction(actLn);
+    addShortcut(ui->btnLn, "l");
 
     connect(ui->btnLog2_10, &QPushButton::clicked, this, [this](){
         controller.applyUnary(state, state.pow_mode ? Unar_ids::Log_2 : Unar_ids::Log_10);
         updateDisplay();
     });
 
-    QAction* actLog2_10 = new QAction(this);
-    actLog2_10->setShortcut(QKeySequence("Ctrl+L"));
-    actLog2_10->setShortcutContext(Qt::ApplicationShortcut);
-    connect(actLog2_10, &QAction::triggered, this, [this]() {
-        ui->btnLog2_10->click();
-    });
-    addAction(actLog2_10);
+    addShortcut(ui->btnLog2_10, "Ctrl+L");
 
     connect(ui->btnLogAB, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::LOGAB);
         ui -> statusbar -> showMessage("Input value for log(a,b)");
     });
-    QAction* actLogAB = new QAction(this);
-    actLogAB->setShortcut(QKeySequence("Alt+l"));
-    connect(actLogAB, &QAction::triggered, this, [this]() {
-        ui->btnLogAB->click();
-    });
-    addAction(actLogAB);
+    addShortcut(ui->btnLogAB, "Alt+L");
 
     connect(ui->btnSqrt, &QPushButton::clicked, this, [this]() {
         controller.applyUnary(state, Unar_ids::Sqrt);
         updateDisplay();
     });
-    QAction* actSqrt = new QAction(this);
-    actSqrt -> setShortcut(QKeySequence("Ctrl+S"));
-    connect(actSqrt, &QAction::triggered, this, [this]() {
-        ui->btnSqrt->click();
-    });
-    addAction(actSqrt);
+    addShortcut(ui->btnSqrt, "Ctrl+S");
 
     connect(ui->btnCbrt, &QPushButton::clicked, this, [this]() {
         controller.applyUnary(state, Unar_ids::Cbrt);
@@ -235,68 +224,37 @@ void MainWindow::connectButtons() {
         controller.applyUnary(state, Unar_ids::Exp);
         updateDisplay();
     });
-    QAction* actExp = new QAction(this);
-    actExp -> setShortcut(QKeySequence("x"));
-    connect(actExp, &QAction::triggered, this, [this]() {
-        ui->btnExp->click();
-    });
-    addAction(actExp);
+    addShortcut(ui->btnExp, "x");
 
     connect(ui->btn_x2_x10, &QPushButton::clicked, this, [this](){
         controller.applyUnary(state, state.pow_mode ? Unar_ids::X2 : Unar_ids::Pow_10X);
         updateDisplay();
     });
-    QAction* act_X2_X10 = new QAction(this);
-    act_X2_X10 -> setShortcut(QKeySequence("z"));
-    act_X2_X10->setShortcutContext(Qt::ApplicationShortcut);
-    connect(act_X2_X10, &QAction::triggered, this, [this]() {
-        ui->btn_x2_x10->click();
-    });
-    addAction(act_X2_X10);
+    addShortcut(ui->btn_x2_x10, "z");
 
     connect(ui->btnPow, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::POW);
         ui->statusbar->showMessage("Input power");
     });
-    QAction* actPow = new QAction(this);
-    actPow -> setShortcut(QKeySequence("^"));
-    connect(actPow, &QAction::triggered, this, [this]() {
-        ui->btnPow->click();
-    });
-    addAction(actPow);
+    addShortcut(ui->btnPow, "^");
 
     connect(ui->btnNroot, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::NROOT);
         ui->statusbar->showMessage("Input root");
     });
-    QAction* actNroot = new QAction(this);
-    actNroot -> setShortcut(QKeySequence("n"));
-    connect(actNroot, &QAction::triggered, this, [this]() {
-        ui->btnNroot->click();
-    });
-    addAction(actNroot);
+    addShortcut(ui->btnNroot, "n");
 
     connect(ui->btnPercent, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::PERCENT);
         ui->statusbar->showMessage("Input percentage");
     });
-    QAction* actPercent = new QAction(this);
-    actPercent -> setShortcut(QKeySequence("%"));
-    connect(actPercent, &QAction::triggered, this, [this]() {
-        ui->btnPercent->click();
-    });
-    addAction(actPercent);
+    addShortcut(ui->btnPercent, "%");
 
     connect(ui->btnMod, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::MOD);
-        ui->statusbar->showMessage("Input modulo");
+        ui->statusbar->showMessage("Input divisor for modulo");
     });
-    QAction* actMod = new QAction(this);
-    actMod -> setShortcut(QKeySequence("Shift+M"));
-    connect(actMod, &QAction::triggered, this, [this]() {
-        ui->btnMod->click();
-    });
-    addAction(actMod);
+    addShortcut(ui->btnMod, "Shift+M");
 
     connect(ui->btnAbs, &QPushButton::clicked, this, [this]() {
         controller.applyUnary(state, Unar_ids::Abs);
@@ -307,13 +265,7 @@ void MainWindow::connectButtons() {
         controller.applyUnary(state, Unar_ids::Inverse);
         updateDisplay();
     });
-    QAction* actInv = new QAction(this);
-    actInv -> setShortcut(QKeySequence("i"));
-    connect(actInv, &QAction::triggered, this, [this]() {
-        ui->btnInv->click();
-    });
-    addAction(actInv);
-
+    addShortcut(ui->btnInv, "i");
 
     // Memory
 
@@ -321,35 +273,20 @@ void MainWindow::connectButtons() {
         controller.memStore(state);
         ui->statusbar->showMessage("Stored in memory: " + QString::fromStdString(state.display));
     });
-    QAction* actMem = new QAction(this);
-    actMem->setShortcut(QKeySequence("m"));
-    connect(actMem, &QAction::triggered, this, [this]() {
-        ui->btnMem->click();
-    });
-    addAction(actMem);
+    addShortcut(ui->btnMem, "m");
 
     connect(ui->btnMemR, &QPushButton::clicked, this, [this](){
         controller.memRecall(state);
         ui->display->setText(QString::fromStdString(state.display));
         ui->statusbar->showMessage("Called from memory: " + QString::fromStdString(state.display));
     });
-    QAction* actMemR = new QAction(this);
-    actMemR->setShortcut(QKeySequence("Ctrl+M"));
-    connect(actMemR, &QAction::triggered, this, [this]() {
-        ui->btnMemR->click();
-    });
-    addAction(actMemR);
+    addShortcut(ui->btnMemR, "Ctrl+M");
 
     connect(ui->btnMemC, &QPushButton::clicked, this, [this](){
         controller.memClear(state);
         ui->statusbar->showMessage("Memory erased");
     });
-    QAction* actMemC = new QAction(this);
-    actMemC->setShortcut(QKeySequence("Alt+M"));
-    connect(actMemC, &QAction::triggered, this, [this]() {
-        ui->btnMemC->click();
-    });
-    addAction(actMemC);
+    addShortcut(ui->btnMemC, "Alt+M");
 
     // DEG / RAD toggle
     connect(ui->btnDegRad, &QPushButton::clicked, this, [this](){
@@ -358,60 +295,34 @@ void MainWindow::connectButtons() {
         ui->statusbar->showMessage(state.deg_mode ? "DEG mode" : "RAD mode");
         ui->btnDegRad->setToolTip(state.deg_mode ? "Change to radians mode (r)" : "Change to degrees mode (r)");
     });
-    QAction* actDegRad = new QAction(this);
-    actDegRad->setShortcut(QKeySequence("r"));
-    actDegRad->setShortcutContext(Qt::ApplicationShortcut);
-    connect(actDegRad, &QAction::triggered, this, [this](){
-        ui->btnDegRad->click();
-    });
-    addAction(actDegRad);
-
+    addShortcut(ui->btnDegRad, "r");
 
     connect(ui->btnDegToRad, &QPushButton::clicked, this, [this]() {
         controller.applyUnary(state, Unar_ids::DegToRad);
         updateDisplay();
     });
-    QAction* actD_R = new QAction(this);
-    actD_R -> setShortcut(QKeySequence("Alt+R"));
-    connect(actD_R, &QAction::triggered, this, [this]() {
-        ui->btnDegToRad->click();
-    });
-    addAction(actD_R);
+    addShortcut(ui->btnDegToRad, "Alt+R");
 
     connect(ui->btnRadToDeg, &QPushButton::clicked, this, [this]() {
         controller.applyUnary(state, Unar_ids::RadToDeg);
         updateDisplay();
     });
-    QAction* actR_D = new QAction(this);
-    actR_D -> setShortcut(QKeySequence("Alt+D"));
-    connect(actR_D, &QAction::triggered, this, [this]() {
-        ui->btnRadToDeg->click();
-    });
-    addAction(actR_D);
+    addShortcut(ui->btnRadToDeg, "Alt+D");
 
+    // // constants π, e
     connect(ui->btnE, &QPushButton::clicked, this, [this](){
         state.input = M_E;
         state.display = std::to_string(state.input);
         ui->display->setText(QString::number(state.input, 'g', 15));
     });
-    QAction* actE = new QAction(this);
-    actE -> setShortcut(QKeySequence("e"));
-    connect(actE, &QAction::triggered, this, [this]() {
-        ui->btnE->click();
-    });
-    addAction(actE);
+    addShortcut(ui->btnE, "e");
 
     connect(ui->btnPI, &QPushButton::clicked, this, [this](){
         state.input = M_PI;
         state.display = std::to_string(state.input);
         ui->display->setText(QString::number(state.input, 'g', 15));
     });
-    QAction* actPI = new QAction(this);
-    actPI -> setShortcut(QKeySequence("Shift+P"));
-    connect(actPI, &QAction::triggered, this, [this]() {
-        ui->btnPI->click();
-    });
-    addAction(actPI);
+    addShortcut(ui->btnPI, "Shift+P");
 
     // POW mode toggle
     connect(ui->btnPowMode, &QPushButton::clicked, this, [this](){
@@ -424,12 +335,7 @@ void MainWindow::connectButtons() {
         ui->btnLog2_10->setToolTip(state.pow_mode ? "2-base logarithm (Ctrl+L)" : "10-base logarithm (Ctrl+L)");
         ui->btnPowMode->setToolTip(state.pow_mode ? "Switch to 10^x mode (y)" : "Switch to x² mode (y)");
     });
-    QAction* actPowMode = new QAction(this);
-    actPowMode->setShortcut(QKeySequence("y"));
-    connect(actPowMode, &QAction::triggered, this, [this](){
-        ui->btnPowMode->click();
-    });
-    addAction(actPowMode);
+    addShortcut(ui->btnPowMode, "y");
 
     // // Bin, Oct, Dec and Hex
     connect(ui->btnBin, &QPushButton::clicked, this, [this](){
@@ -437,48 +343,28 @@ void MainWindow::connectButtons() {
         updateDisplay();
         ui->statusbar->showMessage("BIN mode");
     });
-    QAction* actBin = new QAction(this);
-    actBin -> setShortcut(QKeySequence("b"));
-    connect(actBin, &QAction::triggered, this, [this](){
-        ui->btnBin->click();
-    });
-    addAction(actBin);
+    addShortcut(ui->btnBin, "b");
 
     connect(ui->btnOct, &QPushButton::clicked, this, [this](){
         controller.convertBase(state, 8);
         updateDisplay();
         ui->statusbar->showMessage("OCT mode");
     });
-    QAction* actOct = new QAction(this);
-    actOct -> setShortcut(QKeySequence("o"));
-    connect(actOct, &QAction::triggered, this, [this](){
-        ui->btnOct->click();
-    });
-    addAction(actOct);
+    addShortcut(ui->btnOct, "o");
 
     connect(ui->btnDec, &QPushButton::clicked, this, [this](){
         controller.convertBase(state, 10);
         updateDisplay();
         ui->statusbar->showMessage("DEC mode");
     });
-    QAction* actDec = new QAction(this);
-    actDec -> setShortcut(QKeySequence("d"));
-    connect(actDec, &QAction::triggered, this, [this](){
-        ui->btnDec->click();
-    });
-    addAction(actDec);
+    addShortcut(ui->btnDec, "d");
 
     connect(ui->btnHex, &QPushButton::clicked, this, [this](){
         controller.convertBase(state, 16);
         updateDisplay();
         ui->statusbar->showMessage("HEX mode");
     });
-    QAction* actHex = new QAction(this);
-    actHex -> setShortcut(QKeySequence("h"));
-    connect(actHex, &QAction::triggered, this, [this](){
-        ui->btnHex->click();
-    });
-    addAction(actHex);
+    addShortcut(ui->btnHex, "h");
 
     connect(ui->btnA_hex, &QPushButton::clicked, this, [this]() {
         if(state.base == 16) {
@@ -490,12 +376,7 @@ void MainWindow::connectButtons() {
             ui->statusbar->showMessage("Switch to HEX mode at first.");
         }
     });
-    QAction* actBtnAhex = new QAction(this);
-    actBtnAhex->setShortcut(QKeySequence("Shift+A"));
-    connect(actBtnAhex, &QAction::triggered, this, [this]() {
-        ui->btnA_hex->click();
-    });
-    addAction(actBtnAhex);
+    addShortcut(ui->btnA_hex,"Shift+A");
 
     connect(ui->btnB_hex, &QPushButton::clicked, this, [this]() {
         if(state.base == 16) {
@@ -507,12 +388,7 @@ void MainWindow::connectButtons() {
             ui->statusbar->showMessage("Switch to HEX mode at first.");
         }
     });
-    QAction* actBtnBhex = new QAction(this);
-    actBtnBhex->setShortcut(QKeySequence("Shift+B"));
-    connect(actBtnBhex, &QAction::triggered, this, [this]() {
-        ui->btnB_hex->click();
-    });
-    addAction(actBtnBhex);
+    addShortcut(ui->btnB_hex,"Shift+B");
 
     connect(ui->btnC_hex, &QPushButton::clicked, this, [this]() {
         if(state.base == 16) {
@@ -524,12 +400,7 @@ void MainWindow::connectButtons() {
             ui->statusbar->showMessage("Switch to HEX mode at first.");
         }
     });
-    QAction* actBtnChex = new QAction(this);
-    actBtnChex->setShortcut(QKeySequence("Shift+C"));
-    connect(actBtnChex, &QAction::triggered, this, [this]() {
-        ui->btnC_hex->click();
-    });
-    addAction(actBtnChex);
+    addShortcut(ui->btnC_hex,"Shift+C");
 
     connect(ui->btnD_hex, &QPushButton::clicked, this, [this]() {
         if(state.base == 16) {
@@ -541,12 +412,7 @@ void MainWindow::connectButtons() {
             ui->statusbar->showMessage("Switch to HEX mode at first.");
         }
     });
-    QAction* actBtnDhex = new QAction(this);
-    actBtnDhex->setShortcut(QKeySequence("Shift+D"));
-    connect(actBtnDhex, &QAction::triggered, this, [this]() {
-        ui->btnD_hex->click();
-    });
-    addAction(actBtnDhex);
+    addShortcut(ui->btnD_hex,"Shift+D");
 
     connect(ui->btnE_hex, &QPushButton::clicked, this, [this]() {
         if(state.base == 16) {
@@ -558,12 +424,7 @@ void MainWindow::connectButtons() {
             ui->statusbar->showMessage("Switch to HEX mode at first.");
         }
     });
-    QAction* actBtnEhex = new QAction(this);
-    actBtnEhex->setShortcut(QKeySequence("Shift+E"));
-    connect(actBtnEhex, &QAction::triggered, this, [this]() {
-        ui->btnE_hex->click();
-    });
-    addAction(actBtnEhex);
+    addShortcut(ui->btnE_hex,"Shift+E");
 
     connect(ui->btnF_hex, &QPushButton::clicked, this, [this]() {
         if(state.base == 16) {
@@ -575,12 +436,7 @@ void MainWindow::connectButtons() {
             ui->statusbar->showMessage("Switch to HEX mode at first.");
         }
     });
-    QAction* actBtnFhex = new QAction(this);
-    actBtnFhex->setShortcut(QKeySequence("Shift+F"));
-    connect(actBtnFhex, &QAction::triggered, this, [this]() {
-        ui->btnF_hex->click();
-    });
-    addAction(actBtnFhex);
+    addShortcut(ui->btnF_hex,"Shift+F");
 
     // // DMS -> DEC and DEC -> DMS
 
@@ -593,12 +449,7 @@ void MainWindow::connectButtons() {
             state.display = text.toStdString();
         }
     });
-    QAction* actColon = new QAction(this);
-    actColon -> setShortcut(QKeySequence(":"));
-    connect(actColon, &QAction::triggered, this, [this](){
-        ui->btnColon->click();
-    });
-    addAction(actColon);
+    addShortcut(ui->btnColon, ":");
 
     connect(ui->btnDecToDms, &QPushButton::clicked, this, [this]() {
         double dec_deg = state.input;
@@ -611,13 +462,7 @@ void MainWindow::connectButtons() {
 
         ui->statusbar->showMessage("DEC → DMS");
     });
-
-    QAction* actDecToDms = new QAction(this);
-    actDecToDms->setShortcut(QKeySequence("g"));
-    connect(actDecToDms, &QAction::triggered, this, [this](){
-        ui->btnDecToDms->click();
-    });
-    addAction(actDecToDms);
+    addShortcut(ui->btnDecToDms, "g");
 
     connect(ui->btnDmsToDec, &QPushButton::clicked, this, [this]() {
         QString text = ui->display->text();
@@ -644,74 +489,41 @@ void MainWindow::connectButtons() {
         ui->display->setText(QString::number(dec));
         ui->statusbar->showMessage("DMS → DEC");
     });
-
-    QAction* actDmsToDec = new QAction(this);
-    actDmsToDec->setShortcut(QKeySequence("Alt+G"));
-    connect(actDmsToDec, &QAction::triggered, this, [this](){
-        ui->btnDmsToDec->click();
-    });
-    addAction(actDmsToDec);
+    addShortcut(ui->btnDmsToDec, "Alt+G");
 
     // // Factorial, nCr, nPr
     connect(ui->btnFact, &QPushButton::clicked, this, [this](){
         controller.applyUnary(state, Unar_ids::Factorial);
         updateDisplay();
     });
-    QAction* actFact = new QAction(this);
-    actFact -> setShortcut(QKeySequence("!"));
-    connect(actFact, &QAction::triggered, this, [this]() {
-        ui->btnFact->click();
-    });
-    addAction(actFact);
-
+    addShortcut(ui->btnFact, "!");
 
     // // nCr
     connect(ui->btnC, &QPushButton::clicked, this, [this](){
         controller.setOperation(state, Operation::C);
         ui->statusbar->showMessage("Enter second number for nCr");
     });
-    QAction* actNcR = new QAction(this);
-    actNcR->setShortcut(QKeySequence("c"));
-    connect(actNcR, &QAction::triggered, this, [this](){
-        ui->btnC->click();
-    });
-    addAction(actNcR);
-
+    addShortcut(ui->btnC, "c");
 
     // // nPr
     connect(ui->btnP, &QPushButton::clicked, this, [this](){
         controller.setOperation(state, Operation::P);
         ui->statusbar->showMessage("Enter second number for nPr");
     });
-    QAction* actNpR = new QAction(this);
-    actNpR->setShortcut(QKeySequence("p"));
-    connect(actNpR, &QAction::triggered, this, [this](){
-        ui->btnP->click();
-    });
-    addAction(actNpR);
+    addShortcut(ui->btnP, "p");
 
     // not and nor etc
     connect(ui->btnNot, &QPushButton::clicked, this, [this]() {
         controller.applyUnary(state, Unar_ids::BitNot);
         updateDisplay();
     });
-    QAction* actNot = new QAction(this);
-    actNot->setShortcut(QKeySequence("~"));
-    connect(actNot, &QAction::triggered, this, [this](){
-        ui->btnNot->click();
-    });
-    addAction(actNot);
+    addShortcut(ui->btnNot, "~");
 
     connect(ui->btnAnd, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::AND);
         ui->statusbar->showMessage("Enter second number for AND");
     });
-    QAction* actAnd = new QAction(this);
-    actAnd->setShortcut(QKeySequence("&"));
-    connect(actAnd, &QAction::triggered, this, [this](){
-        ui->btnAnd->click();
-    });
-    addAction(actAnd);
+    addShortcut(ui->btnAnd, "&");
 
     connect(ui->btnNand, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::NAND);
@@ -722,12 +534,7 @@ void MainWindow::connectButtons() {
         controller.setOperation(state, Operation::OR);
         ui->statusbar->showMessage("Enter second number for OR");
     });
-    QAction* actOr = new QAction(this);
-    actOr->setShortcut(QKeySequence("|"));
-    connect(actOr, &QAction::triggered, this, [this](){
-        ui->btnOr->click();
-    });
-    addAction(actOr);
+    addShortcut(ui->btnOr, "|");
 
     connect(ui->btnNor, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::NOR);
@@ -738,12 +545,7 @@ void MainWindow::connectButtons() {
         controller.setOperation(state, Operation::XOR);
         ui->statusbar->showMessage("Enter second number for XOR");
     });
-    QAction* actXor = new QAction(this);
-    actXor->setShortcut(QKeySequence("$"));
-    connect(actXor, &QAction::triggered, this, [this](){
-        ui->btnXor->click();
-    });
-    addAction(actXor);
+    addShortcut(ui->btnXor, "$");
 
     connect(ui->btnXnor, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::XNOR);

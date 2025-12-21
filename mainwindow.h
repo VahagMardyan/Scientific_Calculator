@@ -1,6 +1,8 @@
 #pragma once
 #define _USE_MATH_DEFINES
 #include <QMainWindow>
+#include <QString>
+#include <QPushButton>
 #include "calc.h"
 #include "calculator_controller.h"
 #include "calculator_state.h"
@@ -17,6 +19,7 @@ public:
     ~MainWindow();
 private:
     Ui::MainWindow *ui;
+    void addShortcut(QPushButton*, const QString&);
 
     Scientific_Calculator calc;          // Core
     CalculatorController controller;     // Controller
