@@ -328,12 +328,12 @@ void MainWindow::connectButtons() {
     connect(ui->btnPowMode, &QPushButton::clicked, this, [this](){
         controller.togglePowMode(state);
         ui->btnLog2_10->setText(state.pow_mode ? "log₂" : "log₁₀");
-        ui->btn_x2_x10->setText(state.pow_mode ? "x²" : "10^x");
-        ui->btnPowMode->setText(state.pow_mode ? "x² → 10^x" : "10^x → x²");
-        ui->statusbar->showMessage(state.pow_mode ? "x² mode" : "10^x mode");
-        ui->btn_x2_x10->setToolTip(state.pow_mode ? "x² (z)" : "10^x (z)");
-        ui->btnLog2_10->setToolTip(state.pow_mode ? "2-base logarithm (Ctrl+L)" : "10-base logarithm (Ctrl+L)");
-        ui->btnPowMode->setToolTip(state.pow_mode ? "Switch to 10^x mode (y)" : "Switch to x² mode (y)");
+        ui->btn_x2_x10->setText(state.pow_mode ? "x²" : "10ˣ");
+        ui->btnPowMode->setText(state.pow_mode ? "x² → 10ˣ" : "10ˣ → x²");
+        ui->statusbar->showMessage(state.pow_mode ? "x² mode" : "10ˣ mode");
+        ui->btn_x2_x10->setToolTip(state.pow_mode ? "x² (z)" : "10ˣ (z)");
+        ui->btnLog2_10->setToolTip(state.pow_mode ? "log₂(x) (Ctrl+L)" : "log₁₀(x) (Ctrl+L)");
+        ui->btnPowMode->setToolTip(state.pow_mode ? "Switch to 10ˣ mode (y)" : "Switch to x² mode (y)");
     });
     addShortcut(ui->btnPowMode, "y");
 
