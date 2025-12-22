@@ -169,7 +169,7 @@ std::string Scientific_Calculator::int_to_base(
     if (negative && twos_complement && base_to != 10) {
         u = (1ULL << bits) + num; // this is the same as (1*2^bits)+num
     } else {
-        u = negative ? (unsigned long long)(-num) : (unsigned long long)num;
+        u = negative ? static_cast<unsigned long long>(-num) : static_cast<unsigned long long>(num);
     }
 
     std::string result;
