@@ -167,7 +167,7 @@ std::string Scientific_Calculator::int_to_base(
     unsigned long long u;
 
     if (negative && twos_complement && base_to != 10) {
-        u = (1ULL << bits) + num;
+        u = (1ULL << bits) + num; // this is the same as (1*2^bits)+num
     } else {
         u = negative ? (unsigned long long)(-num) : (unsigned long long)num;
     }
@@ -205,9 +205,9 @@ std::string Scientific_Calculator::convert_base(
 
     try {
         if (base_from == 10) {
-            num = std::stoll(s, nullptr, 10);
+            num = std::stoll(s, nullptr, 10); // long long
         } else {
-            unsigned long long raw = std::stoull(s, nullptr, base_from);
+            unsigned long long raw = std::stoull(s, nullptr, base_from); // unsigned long long
 
             // two's complement input
             if (!negative && twos_complement && bits > 0 && (raw & (1ULL << (bits - 1)))) {
