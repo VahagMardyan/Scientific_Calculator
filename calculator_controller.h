@@ -16,7 +16,7 @@ public:
     void calculate(CalculatorState&);
 
     // unary ops (by button id)
-    void applyUnary(CalculatorState&, Unar_ids btnId);
+    void applyUnary(CalculatorState&, Unar_ids);
 
     // modes
     void toggleDegRad(CalculatorState&);

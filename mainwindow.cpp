@@ -220,6 +220,7 @@ void MainWindow::connectButtons() {
         controller.applyUnary(state, Unar_ids::Cbrt);
         updateDisplay();
     });
+    addShortcut(ui->btnCbrt, "Ctrl+C");
 
     connect(ui->btnExp, &QPushButton::clicked, this, [this]() {
         controller.applyUnary(state, Unar_ids::Exp);
@@ -261,6 +262,7 @@ void MainWindow::connectButtons() {
         controller.applyUnary(state, Unar_ids::Abs);
         updateDisplay();
     });
+    addShortcut(ui->btnAbs, "a");
 
     connect(ui->btnInv, &QPushButton::clicked, this, [this]() {
         controller.applyUnary(state, Unar_ids::Inverse);
@@ -294,7 +296,7 @@ void MainWindow::connectButtons() {
         controller.toggleDegRad(state);
         ui->btnDegRad->setText(state.deg_mode ? "DEG" : "RAD");
         ui->statusbar->showMessage(state.deg_mode ? "DEG mode" : "RAD mode");
-        ui->btnDegRad->setToolTip(state.deg_mode ? "Change to radians mode (r)" : "Change to degrees mode (r)");
+        ui->btnDegRad->setToolTip(state.deg_mode ? "Switch to radians mode (r)" : "Switch to degrees mode (r)");
     });
     addShortcut(ui->btnDegRad, "r");
 
@@ -530,6 +532,7 @@ void MainWindow::connectButtons() {
         controller.setOperation(state, Operation::NAND);
         ui->statusbar->showMessage("Enter second number for NAND");
     });
+    addShortcut(ui->btnNand, "Alt+&");
 
     connect(ui->btnOr, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::OR);
@@ -541,6 +544,7 @@ void MainWindow::connectButtons() {
         controller.setOperation(state, Operation::NOR);
         ui->statusbar->showMessage("Enter second number for NOR");
     });
+    addShortcut(ui->btnNor, "Alt+|");
 
     connect(ui->btnXor, &QPushButton::clicked, this, [this]() {
         controller.setOperation(state, Operation::XOR);
@@ -552,6 +556,7 @@ void MainWindow::connectButtons() {
         controller.setOperation(state, Operation::XNOR);
         ui->statusbar->showMessage("Enter second number for XNOR");
     });
+    addShortcut(ui->btnXnor, "Alt+$");
 
     // User Manual
     connect(ui->btnLink, &QPushButton::clicked, this, [this]() {

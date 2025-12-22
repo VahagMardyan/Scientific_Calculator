@@ -257,8 +257,12 @@ void CalculatorController::convertBase(CalculatorState& s, int newBase) {
 
 void CalculatorController::clearAll(CalculatorState& s) {
     double mem = s.memory;
+    bool deg_rad_mode = s.deg_mode;
+    bool pow_mode = s.pow_mode;
     s = CalculatorState{};
     s.memory = mem;
+    s.deg_mode = deg_rad_mode;
+    s.pow_mode = pow_mode;
 }
 
 // Display Sync
