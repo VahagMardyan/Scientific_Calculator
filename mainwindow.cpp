@@ -142,6 +142,7 @@ void MainWindow::connectButtons() {
         updateDisplay();
     });
     ui->btnDel->setShortcut(QKeySequence("Backspace"));
+    addShortcut(ui->btnDel, "Delete");
 
     connect(ui->btnSign, &QPushButton::clicked, this, [this](){
         controller.changeSign(state);
