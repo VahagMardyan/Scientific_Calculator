@@ -6,7 +6,7 @@
 class CalculatorController {
 public:
     // input
-    void inputDigit(CalculatorState&, int);
+    void inputSymbol(CalculatorState&, char);
     void inputDot(CalculatorState&);
     void backspace(CalculatorState&);
     void changeSign(CalculatorState&);

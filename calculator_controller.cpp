@@ -5,18 +5,29 @@
 #include <cmath>
 
 // Input
-void CalculatorController::inputDigit(CalculatorState& s, int digit) {
-    if (s.new_input) {
-        s.display = std::to_string(digit);
+
+void CalculatorController::inputSymbol(CalculatorState& s, char c) {
+    if (s.new_input || s.display == "0") {
+        s.display = std::string(1, c);
         s.new_input = false;
     } else {
-        if (s.display == "0")
-            s.display = std::to_string(digit);
-        else
-            s.display += std::to_string(digit);
+        s.display += c;
     }
-    s.input = std::stod(s.display);
+
+    if (s.base != 16) {
+        if (!s.display.empty() &&
+            (isdigit(s.display[0]) || s.display[0] == '+' || s.display[0] == '.')) {
+            try {
+                s.input = std::stod(s.display);
+            } catch (...) {
+                s.input = 0;
+                s.error = true;
+                s.errorMsg = "Invalid number";
+            }
+        }
+    }
 }
+
 
 void CalculatorController::inputDot(CalculatorState& s) {
     if (s.new_input) {
@@ -29,7 +40,7 @@ void CalculatorController::inputDot(CalculatorState& s) {
 }
 
 void CalculatorController::backspace(CalculatorState& s) {
-    if (s.new_input || s.display.empty())
+    if (s.display.empty())
         return;
 
     s.display.pop_back();
@@ -39,11 +50,19 @@ void CalculatorController::backspace(CalculatorState& s) {
         s.new_input = true;
     }
 
-    s.input = std::stod(s.display);
+    if(s.base != 16) {
+        try {
+            s.input = std::stod(s.display);
+        } catch(...) {
+            s.input = 0;
+            s.error = true;
+            s.errorMsg = "Invalid number";
+        }
+    }
 }
 
 void CalculatorController::changeSign(CalculatorState& s) {
-    if (s.display == "0" || s.display.empty())
+    if (s.display.empty() || s.display == "0")
         return;
 
     if (s.display[0] == '-')
@@ -51,7 +70,15 @@ void CalculatorController::changeSign(CalculatorState& s) {
     else
         s.display.insert(0, 1, '-');
 
-    s.input = std::stod(s.display);
+    if (s.base != 16) {
+        try {
+            s.input = std::stod(s.display);
+        } catch (...) {
+            s.input = 0;
+            s.error = true;
+            s.errorMsg = "Invalid number";
+        }
+    }
 }
 
 // Binary Operations
@@ -272,3 +299,4 @@ void CalculatorController::syncDisplay(CalculatorState& s) {
     oss << std::setprecision(15) << s.input;
     s.display = oss.str();
 }
+

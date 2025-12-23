@@ -41,60 +41,61 @@ void MainWindow::connectButtons() {
 
     // Digits 0-9
     connect(ui->btn0, &QPushButton::clicked, this, [this](){
-        controller.inputDigit(state, 0);
+        controller.inputSymbol(state, '0');
         updateDisplay();
     });
     ui->btn0->setShortcut(QKeySequence("0"));
 
     connect(ui->btn1, &QPushButton::clicked, this, [this](){
-        controller.inputDigit(state, 1);
+        controller.inputSymbol(state, '1');
         updateDisplay();
     });
     ui->btn1->setShortcut(QKeySequence("1"));
 
     connect(ui->btn2, &QPushButton::clicked, this, [this](){
-        controller.inputDigit(state, 2);
+        controller.inputSymbol(state, '2');
         updateDisplay();
     });
     ui->btn2->setShortcut(QKeySequence("2"));
 
     connect(ui->btn3, &QPushButton::clicked, this, [this](){
-        controller.inputDigit(state, 3);
+        controller.inputSymbol(state, '3');
         updateDisplay();
     });
     ui->btn3->setShortcut(QKeySequence("3"));
 
     connect(ui->btn4, &QPushButton::clicked, this, [this](){
-        controller.inputDigit(state, 4);
+        controller.inputSymbol(state, '4');
         updateDisplay();
     });
     ui->btn4->setShortcut(QKeySequence("4"));
 
     connect(ui->btn5, &QPushButton::clicked, this, [this](){
-        controller.inputDigit(state, 5);
+        controller.inputSymbol(state, '5');
         updateDisplay();
     });
     ui->btn5->setShortcut(QKeySequence("5"));
 
     connect(ui->btn6, &QPushButton::clicked, this, [this](){
-        controller.inputDigit(state, 6);
+        controller.inputSymbol(state, '6');
         updateDisplay(); });
     ui->btn6->setShortcut(QKeySequence("6"));
 
     connect(ui->btn7, &QPushButton::clicked, this, [this](){
-        controller.inputDigit(state, 7);
+        controller.inputSymbol(state, '7');
         updateDisplay();
     });
     ui->btn7->setShortcut(QKeySequence("7"));
 
     connect(ui->btn8, &QPushButton::clicked, this, [this](){
-        controller.inputDigit(state, 8);
+        controller.inputSymbol(state, '8');
         updateDisplay();
     });
     ui->btn8->setShortcut(QKeySequence("8"));
 
     connect(ui->btn9, &QPushButton::clicked, this, [this](){
-        controller.inputDigit(state, 9); updateDisplay();
+        controller.inputSymbol(state, '9');
+        updateDisplay();
     });
     ui->btn9->setShortcut(QKeySequence("9"));
 
@@ -371,10 +372,8 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnA_hex, &QPushButton::clicked, this, [this]() {
         if(state.base == 16) {
-            QString text = ui->display->text();
-            text+="A";
-            ui->display->setText(text);
-            state.display = text.toStdString();
+            controller.inputSymbol(state,'A');
+            updateDisplay();
         } else {
             ui->statusbar->showMessage("Switch to HEX mode at first.");
         }
@@ -383,10 +382,8 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnB_hex, &QPushButton::clicked, this, [this]() {
         if(state.base == 16) {
-            QString text = ui->display->text();
-            text+="B";
-            ui->display->setText(text);
-            state.display = text.toStdString();
+            controller.inputSymbol(state,'B');
+            updateDisplay();
         } else {
             ui->statusbar->showMessage("Switch to HEX mode at first.");
         }
@@ -395,10 +392,8 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnC_hex, &QPushButton::clicked, this, [this]() {
         if(state.base == 16) {
-            QString text = ui->display->text();
-            text+="C";
-            ui->display->setText(text);
-            state.display = text.toStdString();
+            controller.inputSymbol(state,'C');
+            updateDisplay();
         } else {
             ui->statusbar->showMessage("Switch to HEX mode at first.");
         }
@@ -407,10 +402,8 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnD_hex, &QPushButton::clicked, this, [this]() {
         if(state.base == 16) {
-            QString text = ui->display->text();
-            text+="D";
-            ui->display->setText(text);
-            state.display = text.toStdString();
+            controller.inputSymbol(state,'D');
+            updateDisplay();
         } else {
             ui->statusbar->showMessage("Switch to HEX mode at first.");
         }
@@ -419,10 +412,8 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnE_hex, &QPushButton::clicked, this, [this]() {
         if(state.base == 16) {
-            QString text = ui->display->text();
-            text+="E";
-            ui->display->setText(text);
-            state.display = text.toStdString();
+            controller.inputSymbol(state,'E');
+            updateDisplay();
         } else {
             ui->statusbar->showMessage("Switch to HEX mode at first.");
         }
@@ -431,10 +422,8 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnF_hex, &QPushButton::clicked, this, [this]() {
         if(state.base == 16) {
-            QString text = ui->display->text();
-            text+="F";
-            ui->display->setText(text);
-            state.display = text.toStdString();
+            controller.inputSymbol(state,'F');
+            updateDisplay();
         } else {
             ui->statusbar->showMessage("Switch to HEX mode at first.");
         }
@@ -447,9 +436,8 @@ void MainWindow::connectButtons() {
         QString text = ui->display->text();
 
         if (!text.endsWith(":")) {
-            text += ":";
-            ui->display->setText(text);
-            state.display = text.toStdString();
+            controller.inputSymbol(state,':');
+            updateDisplay();
         }
     });
     addShortcut(ui->btnColon, ":");
