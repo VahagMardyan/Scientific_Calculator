@@ -51,7 +51,7 @@ public:
         const std::string& value,
         int base_from,
         int base_to,
-        int bits = 32,
+        int bits = 64,
         bool twos_complement = true
     ) const;
 
