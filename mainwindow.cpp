@@ -275,7 +275,7 @@ void MainWindow::connectButtons() {
 
     connect(ui->btnMem, &QPushButton::clicked, this, [this](){
         controller.memStore(state);
-        ui->statusbar->showMessage("Stored in memory: " + QString::fromStdString(state.display));
+        ui->statusbar->showMessage("Stored in memory: " + QString::fromStdString(state.error ? "" : state.display));
     });
     addShortcut(ui->btnMem, "m");
 

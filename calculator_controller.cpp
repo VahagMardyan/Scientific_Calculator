@@ -254,11 +254,15 @@ void CalculatorController::togglePowMode(CalculatorState& s) {
 // Memory
 
 void CalculatorController::memStore(CalculatorState& s) {
-    if(s.display.empty()) {
-        s.memory = 0;
+    if (s.error) {
         return;
     }
-    s.memory = std::stod(s.display);
+
+    if (s.base == 16) {
+        s.memory = s.input;
+    } else {
+        s.memory = std::stod(s.display);
+    }
     s.new_input = true;
 }
 
