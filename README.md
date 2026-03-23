@@ -50,8 +50,3 @@ To create a version that runs on any Windows machine without Qt installed, use t
 cd release
 windeployqt CalculatorApp.exe
 ```
-
-## 📝 License
-This project is open-source and available under the MIT License.
-
----
