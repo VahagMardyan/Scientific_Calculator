@@ -1,2 +1,46 @@
-/.qtcreator/
-/build/
+*.obj
+*.o
+*.a
+*.lib
+*.so
+*.dylib
+*.exe
+*.dll
+*.stash
+
+# --- Qt Specific Generated Files ---
+# These are recreated every time you run qmake/build
+moc_*.cpp
+moc_*.h
+qrc_*.cpp
+ui_*.h
+Makefile*
+*.pro.user
+*.pro.user.*
+object_script.*
+*.qm
+
+# --- Build Directories ---
+# qmake often creates these by default on Windows
+debug/
+release/
+build/
+bin/
+
+# --- IDE Specifics (Qt Creator / VS Code) ---
+.vscode/
+.idea/
+*.swp
+*~
+*.orig
+*.bak
+
+# --- Windows System Files ---
+Thumbs.db
+desktop.ini
+
+# --- Large/Temporary Files ---
+*.pdb
+*.ilk
+*.exp
+*.map
