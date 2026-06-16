@@ -8,20 +8,20 @@ https://vahagmardyan.github.io/Synopsys_Course_Project_User_Manual/
 
 A cross-platform graphical calculator built using **C++17** and the **Qt Framework**. This project implements a structured approach to UI and logic separation, utilizing a controller-based architecture.
 
-## 🛠 Tech Stack
+## Tech Stack
 * **Language:** C++17
 * **Framework:** Qt 5/6 (Core, GUI, Widgets)
 * **Build System:** qmake
 * **Interface:** Qt Designer (.ui)
 
-## 📂 Project Architecture
+## Project Architecture
 The project is organized into logical components to ensure maintainability:
 * **UI Layer:** `mainwindow.h/cpp` handles the graphical interface and user input events.
 * **Logic Layer:** `calc.h/cpp` contains the core mathematical engine and expression processing.
 * **Control Layer:** `calculator_controller.h/cpp` acts as the bridge between the UI and the math logic.
 * **State Management:** `calculator_state.h` and `unar_ids.h` manage the internal state machine and operation types (e.g., unary operators).
 
-## 🚀 Building and Running (Windows 11)
+## Building and Running (Windows 11)
 
 To run this project without using Qt Creator, follow these steps using the **Qt Command Prompt**:
 
