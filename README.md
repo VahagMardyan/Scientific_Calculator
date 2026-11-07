@@ -44,6 +44,17 @@ Once the build is complete, navigate to the output folder and run the executable
 .\release\CalculatorApp.exe
 ```
 
+## Download & Run (Windows 10/11, 64-bit)
+
+1. Download `Scientific_Calculator_v1.0_win64.zip`.
+2. Extract the zip.
+3. Double-click `scientific_calculator_qt.exe`.
+
+No Qt installation is required. Keep the `.exe` in the same folder as the included DLLs and subfolders.
+
+> Windows SmartScreen may warn that the app is unrecognized because it isn't code-signed.
+> Click **More info → Run anyway**.
+
 ### 3. Standalone Deployment
 To create a version that runs on any Windows machine without Qt installed, use the deployment tool:
 ```cmd
